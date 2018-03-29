@@ -36,17 +36,26 @@ public class TransferToServer {
 	private void readData() {
 		try{
 			while(true){
-				SocketChannel conn = listener.accept();
-				System.out.println("Accepted: " + conn);
-				conn.configureBlocking(true);
+				SocketChannel socketChannel = listener.accept();
+				System.out.println("Accepted: " + socketChannel);
+				socketChannel.configureBlocking(true);
 
 				ByteBuffer dst = ByteBuffer.allocate(500000000);
-				FileOutputStream file_out = new FileOutputStream("C:\\Users\\coscoi_cjm\\Desktop\\copy\\test2.mp4");
-				FileChannel out = file_out.getChannel();
-				int nread = 0;
+				FileOutputStream file_out = new FileOutputStream("C:\\Users\\coscoi_cjm\\Desktop\\copy\\FILE.mp4");
+				FileChannel fileChannel = file_out.getChannel();
+				long count = fileChannel.size();
+//		        fileChannel.transferFrom(socketChannel, 0, count); 
+				
+/*				long pos = 0, length = fc.size();
+				while( pos < length) {
+					pos += fc.transferFrom(socketChannel, pos, length,  sc);			
+					System.out.println("진행 크기: " + pos);
+				}*/
+				
+				/*int nread = 0;
 				while(nread != -1){
 					try{
-						nread = conn.read(dst);
+						nread = socketChannel.read(dst);
 						System.out.println("다 읽었다네~: ");
 					}catch (Exception e) {
 						e.printStackTrace();
@@ -55,9 +64,10 @@ public class TransferToServer {
 					}
 				}
 				System.out.println("사이즈: " + dst.position());
-				dst.rewind();
-				out.write(dst);
-				out.close();
+				dst.flip();
+				fileChannel.write(dst);*/
+				
+				fileChannel.close();
 			}
 		}catch (Exception e) {
 			// TODO: handle exception
